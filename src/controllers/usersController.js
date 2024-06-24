@@ -1,4 +1,5 @@
 const Users = require('../models/Users.js');
+const bcrypt = require('bcrypt')
 
 class usersController{
     static async exibirUsuarios(req, res){
@@ -30,7 +31,9 @@ class usersController{
         const email = req.body.email;
         const password = req.body.password;
 
-        await Users.create({ID_USER: 'default', nome: nome, email: email, password: password})
+        const hashedPassword = await bcrypt.hash(password, 8)
+            
+        await Users.create({ID_USER: 'default', nome: nome, email: email, password: hashedPassword})
 
         res.status(201).send('Usuario Criado')
         }catch(erro){
